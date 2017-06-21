@@ -10,5 +10,5 @@ import javax.transaction.Transactional;
 @Transactional
 public interface PersonRepository extends CrudRepository<Person, Integer>{
 
-    public Person findById(int id);
+
 }

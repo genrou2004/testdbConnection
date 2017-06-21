@@ -1,21 +1,21 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th ="www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8" />
     <title>Read Data</title>
 </head>
 <body>
 <div class="container">
-    <form th:action="@{/read}" th:object="${person}" >
-
-        First Name
-        <input type="text" th:field="*{firstName}" class="form-control" />
-        Last Name
-        <input type="text" th:field="*{lastName}" class="form-control" />
-
-
-        <button type="submit" class="btn btn-default">Submit</button>
-    </form>
+    <table class="table table-striped">
+        <tr>
+            <th>Student</th>
+            <th>Food Type</th>
+        </tr>
+        <tr th:each="person : ${persons}">
+            <td th:text="${person.firstName}"></td>
+            <td th:text="${person.lastName}"></td>
+        </tr>
+    </table>
 </div>
 </body>
 </html>

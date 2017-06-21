@@ -3,76 +3,38 @@ package com.raya;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 
-//@Controller
-@RestController
-@RequestMapping("/person")
+
+@Controller
 public class PersonController {
+
 @Autowired
- PersonRepository personRepository;
+ private PersonRepository personRepository;
 
-    /**
-     * GET /create  --> Create a new person and save it in the database.
-     */
-    @RequestMapping("/create")
-    public Person create(Person person) {
-        person.setFirstName(person.getFirstName());
-        person.setLastName(person.getLastName());
-        person = personRepository.save(person);
-        return person;
+
+    @RequestMapping ("/")
+    public String home(Model model){
+        model.addAttribute("person",new Person());
+        return "create";
     }
 
-
-    /**
-     * GET /read  --> Read a person by booking id from the database.
-     */
-    @RequestMapping("/read")
-    public Person read(@RequestParam int id) {
-        Person person = personRepository.findById(id);
-        return person;
-    }
-
-    /**
-     * GET /update  --> Update a person record and save it in the database.
-     */
-    @RequestMapping("/update")
-    public Person update(@RequestParam int id, @RequestParam String firstName, @RequestParam String lastName) {
-        Person person = personRepository.findById(id);
-        person.setFirstName(firstName);
-        person.setLastName(lastName);
-        person = personRepository.save(person);
-        return person;
-    }
-
-    /**
-     * GET /delete  --> Delete a person from the database.
-     */
-    @RequestMapping("/delete")
-    public String delete(@RequestParam int id) {
-        personRepository.delete(id);
-        return "person #"+id+" deleted successfully";
-    }
-
-    /*@GetMapping   ("/val")
-    public String login(Model model){
-
+    @GetMapping("/create")
+    public String getStudent(Model model){
         model.addAttribute(new Person());
-        return "index";
+        model.addAttribute("person", personRepository.findAll());
+        return "read";
     }
 
-    @PostMapping  ("/val")
-    public @ResponseBody  String processLogin(@ModelAttribute  Person person){
-
-        //ThingRespository.save(thing);
-        return person.toString();
-
+    @PostMapping("/create")
+    public String processStudent(@Valid Person person, BindingResult bindingResult){
+        if (bindingResult.hasErrors()){
+            return "read";
+        }
+        personRepository.save(person);
+        return "redirect:/create";
     }
-
-   @RequestMapping ("/val")
-    public @ResponseBody String getPerson(){
-        return personRepository.findAll().toString();
-    }*/
-
 }
